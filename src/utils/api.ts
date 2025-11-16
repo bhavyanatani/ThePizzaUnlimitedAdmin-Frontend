@@ -1,5 +1,4 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-console.log(API_BASE_URL)
 export const getAuthToken = (): string | null => {
   return localStorage.getItem('token');
 };
@@ -35,7 +34,7 @@ export const apiRequest = async (
 
     if (response.status === 401) {
       clearAuthToken();
-      window.location.href = '/admin/login';
+      window.location.href = '/api/admin/login';
       throw new Error('Unauthorized');
     }
 
@@ -57,74 +56,74 @@ const capitalize = (str: string): string => {
 
 export const api = {
   login: async (email: string, password: string) => {
-    return apiRequest('/admin/login', {
+    return apiRequest('/api/admin/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
   },
 
   getOverview: async () => {
-    const response = await apiRequest('/admin/analytics/overview');
+    const response = await apiRequest('/api/admin/analytics/overview');
     return response.data || response;
   },
 
   getCategories: async () => {
-    return apiRequest('/admin/menu/categories');
+    return apiRequest('/api/admin/menu/categories');
   },
 
   createCategory: async (data: any) => {
-    return apiRequest('/admin/menu/category', {
+    return apiRequest('/api/admin/menu/category', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   },
 
   updateCategory: async (id: string, data: any) => {
-    return apiRequest(`/admin/menu/category/${id}`, {
+    return apiRequest(`/api/admin/menu/category/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   },
 
   deleteCategory: async (id: string) => {
-    return apiRequest(`/admin/menu/category/${id}`, { method: 'DELETE' });
+    return apiRequest(`/api/admin/menu/category/${id}`, { method: 'DELETE' });
   },
 
   getCategoryItems: async (categoryId: string, page = 1, limit = 10) => {
     const params = new URLSearchParams({ page: String(page), limit: String(limit) });
-    return apiRequest(`/admin/menu/categories/${categoryId}/items?${params}`);
+    return apiRequest(`/api/admin/menu/categories/${categoryId}/items?${params}`);
   },
 
   createItem: async (categoryId: string, formData: FormData) => {
-    return apiRequest(`/admin/menu/categories/${categoryId}/items`, {
+    return apiRequest(`/api/admin/menu/categories/${categoryId}/items`, {
       method: 'POST',
       body: formData,
     });
   },
 
   updateItem: async (id: string, formData: FormData) => {
-    return apiRequest(`/admin/menu/items/${id}`, {
+    return apiRequest(`/api/admin/menu/items/${id}`, {
       method: 'PUT',
       body: formData,
     });
   },
 
   deleteItem: async (id: string) => {
-    return apiRequest(`/admin/menu/items/${id}`, { method: 'DELETE' });
+    return apiRequest(`/api/admin/menu/items/${id}`, { method: 'DELETE' });
   },
 
   getOrders: async (page = 1, limit = 20, status?: string) => {
     const params = new URLSearchParams({ page: String(page), limit: String(limit) });
     if (status && status !== 'all') params.append('status', capitalize(status));
-    return apiRequest(`/admin/orders?${params}`);
+    return apiRequest(`/api/admin/orders?${params}`);
   },
 
   getOrder: async (id: string) => {
-    return apiRequest(`/admin/orders/${id}`);
+    return apiRequest(`/api/admin/orders/${id}`);
   },
 
   updateOrderStatus: async (id: string, status: string) => {
-    return apiRequest(`/admin/orders/${id}/status`, {
+    return apiRequest(`/api/admin/orders/${id}/status`, {
       method: 'PUT',
       body: JSON.stringify({ status: capitalize(status) }),
     });
@@ -132,15 +131,15 @@ export const api = {
 
   getReservations: async (page = 1, limit = 20) => {
     const params = new URLSearchParams({ page: String(page), limit: String(limit) });
-    return apiRequest(`/admin/reservations?${params}`);
+    return apiRequest(`/api/admin/reservations?${params}`);
   },
 
   getReservation: async (id: string) => {
-    return apiRequest(`/admin/reservation/${id}`);
+    return apiRequest(`/api/admin/reservation/${id}`);
   },
 
   updateReservationStatus: async (id: string, status: string) => {
-    return apiRequest(`/admin/reservation/${id}/status`, {
+    return apiRequest(`/api/admin/reservation/${id}/status`, {
       method: 'PUT',
       body: JSON.stringify({ status: capitalize(status) }),
     });
@@ -148,10 +147,10 @@ export const api = {
 
   getReviews: async (page = 1, limit = 20) => {
     const params = new URLSearchParams({ page: String(page), limit: String(limit) });
-    return apiRequest(`/admin/reviews?${params}`);
+    return apiRequest(`/api/admin/reviews?${params}`);
   },
 
   deleteReview: async (id: string) => {
-    return apiRequest(`/admin/reviews/${id}`, { method: 'DELETE' });
+    return apiRequest(`/api/admin/reviews/${id}`, { method: 'DELETE' });
   },
 };
